@@ -258,6 +258,7 @@ func Parseb64(data string) []byte {
 }
 
 // getModPath gets the path to the module that contains the extension
+// TODO: use go embed
 func getModPath() string {
 	_, filename, _, ok := runtime.Caller(0)
 	if !ok {
