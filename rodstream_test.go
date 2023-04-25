@@ -14,13 +14,18 @@ func TestMustPrepareLauncher(t *testing.T) {
 	var l = rodstream.MustPrepareLauncher(rodstream.LauncherArgs{
 		UserMode: false,
 	})
-	hasExtension := l.Flags["whitelisted-extension-id"]
 
-	if len(hasExtension) == 0 {
-		t.Error("whitelisted-extension-id is not set")
+	var extensionId []string
+
+	if value, ok := l.Flags["whitelisted-extension-id"]; ok {
+		extensionId = value
+	} else if value, ok := l.Flags["allowlisted-extension-id"]; ok {
+		extensionId = value
+	} else {
+		t.Error("Neither whitelisted-extension-id nor allowlisted-extension-id is set")
 	}
 
-	if hasExtension[0] != rodstream.ExtensionId {
+	if extensionId[0] != rodstream.ExtensionId {
 		t.Errorf("Extension is invalid")
 	}
 
@@ -60,20 +65,32 @@ func TestMustGetStream(t *testing.T) {
 		log.Panicln(err)
 	}
 
-	time.AfterFunc(time.Second*10, func() {
-		rodstream.MustStopStream(pageInfo)
-		browser.Close()
+	time.AfterFunc(time.Minute, func() {
+		if err := rodstream.MustStopStream(pageInfo); err != nil {
+			log.Panicln(err)
+		}
+		browser.MustClose()
+		os.Exit(0)
 	})
 
-	videoFile, err := os.Create("/tmp/video-test.webm")
+	fpath := "/tmp/video-test.webm"
+	videoFile, err := os.Create(fpath)
 	if err != nil {
 		panic(err)
 	}
 
-	for x := range streamCh {
-		b := rodstream.Parseb64(x)
+	for {
+		b64Str, ok := <-streamCh
+		if !ok {
+			close(streamCh)
+			break
+		}
+
+		b := rodstream.Parseb64(b64Str)
 		videoFile.Write(b)
 	}
+
+	t.Logf("recording stopped, video available here: %s", fpath)
 }
 
 func createBrowser() *rod.Browser {
