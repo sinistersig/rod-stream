@@ -19,7 +19,7 @@ import (
 	"github.com/go-rod/rod"
 	"github.com/go-rod/stealth"
 
-	rodstream "github.com/navicstein/rod-stream"
+	rodstream "github.com/sinistersig/rod-stream"
 )
 
 func main() {

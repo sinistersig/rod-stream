@@ -59,7 +59,7 @@ func MustPrepareLauncher(args LauncherArgs) *launcher.Launcher {
 	l = l.
 		Set("allow-http-screen-capture").
 		Set("enable-usermedia-screen-capturing").
-		Set("whitelisted-extension-id", ExtensionId).
+		Set("allowlisted-extension-id", ExtensionId).
 		Set("disable-extensions-except", extPath).
 		Set("load-extension", extPath).
 		Set("allow-google-chromefile-access").
