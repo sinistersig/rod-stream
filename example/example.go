@@ -39,7 +39,7 @@ func main() {
 	page := browser.MustPage()
 	page.MustNavigate(url).MustWaitRequestIdle()
 
-	page.MustElement(".ytp-large-play-button").MustClick()
+	page.Timeout(100 * time.Second).MustElement(".ytp-large-play-button").MustClick()
 
 	pageInfo := rodstream.MustCreatePage(browser)
 	streamCh := make(chan string, 1024)
