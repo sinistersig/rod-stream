@@ -59,7 +59,7 @@ func MustPrepareLauncher(args LauncherArgs) *launcher.Launcher {
 	l = l.
 		Set("allow-http-screen-capture").
 		Set("enable-usermedia-screen-capturing").
-		Set("whitelisted-extension-id", ExtensionId).
+		Set("allowlisted-extension-id", ExtensionId).
 		Set("disable-extensions-except", extPath).
 		Set("load-extension", extPath).
 		Set("allow-google-chromefile-access").
@@ -93,7 +93,7 @@ func MustCreatePage(browser *rod.Browser) *PageInfo {
 	x, _ := proto.BrowserGetBrowserCommandLine{}.Call(browser)
 
 	if len(x.Arguments) > 0 {
-		if !slices.Contains(x.Arguments, fmt.Sprintf("--whitelisted-extension-id=%s", ExtensionId)) {
+		if !slices.Contains(x.Arguments, fmt.Sprintf("--allowlisted-extension-id=%s", ExtensionId)) {
 			panic("Recording extension not initialize properly!")
 		}
 	}

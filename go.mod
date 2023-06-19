@@ -1,4 +1,4 @@
-module github.com/navicstein/rod-stream
+module github.com/sinistersig/rod-stream
 
 go 1.18
 
